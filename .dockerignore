@@ -1,0 +1,11 @@
+.venv
+.git
+__pycache__
+*.pyc
+.env
+data/
+notebooks/
+tests/
+.pytest_cache
+.streamlit/secrets.toml
+migrate_csv_to_pg.py
