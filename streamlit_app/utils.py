@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import ast
+import os
+from sqlalchemy import create_engine
 
 # ── Couleurs Strava ──
 STRAVA_ORANGE = "#FC4C02"
@@ -8,9 +10,17 @@ STRAVA_BLUE   = "#4FC3F7"
 PLOT_BG       = "#2D2D32"
 PAPER_BG      = "#242428"
 
-@st.cache_data(ttl=3600)  # expire après 1 heure
+@st.cache_resource
+def _engine():
+    url = os.environ["DATABASE_URL"].replace("postgres://", "postgresql://", 1)
+    return create_engine(url, pool_pre_ping=True)
+
+@st.cache_data(ttl=3600)
 def load_data(path="data/activities_clean.csv"):
-    df = pd.read_csv(path)
+    # Traduit le chemin CSV historique en nom de table Postgres
+    # ex: "data/activities_clean.csv" -> "activities_clean"
+    table = os.path.splitext(os.path.basename(path))[0]
+    df = pd.read_sql(f"SELECT * FROM {table}", _engine())
     if "month" in df.columns:
         df["month"] = df["month"].astype("period[M]")
     return df

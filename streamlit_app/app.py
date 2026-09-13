@@ -1,4 +1,6 @@
 import streamlit as st
+from dotenv import load_dotenv
+load_dotenv()
 
 vue_generale = st.Page("pages/1_Vue_générale.py", title="Vue générale", icon="🏃")
 distances    = st.Page("pages/2_Distances.py",    title="Distances",    icon="📏")
