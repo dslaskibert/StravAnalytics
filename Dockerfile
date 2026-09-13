@@ -20,5 +20,4 @@ EXPOSE 8501
 CMD ["streamlit", "run", "streamlit_app/app.py", \
      "--server.port=8501", \
      "--server.address=0.0.0.0", \
-     "--server.headless=true", \
-     "--server.enableWebsocketCompression=false"]
+     "--server.headless=true"]
