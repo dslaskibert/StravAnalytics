@@ -217,6 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 data/activities.csv
+data/streams/
 notebooks/debug.ipynb
 
 docs/

@@ -1,9 +1,9 @@
-# Maintenant qu'on est authentifiés, on va récupérer toutes tes activités. C'est toi qui l'écris — voici ce que le fichier doit faire :
+# Maintenant qu'on est authentifiés, on va récupérer toutes les activités.
 
 # Charger les variables du .env
 # Créer un client Strava avec le token d'accès
-# Gérer le refresh automatique du token (il expire toutes les 6h)
-# Récupérer toutes tes activités
+# Gérer le refresh automatique du token (expire toutes les 6h)
+# Récupérer toutes les activités
 # Les sauvegarder dans un fichier data/activities.csv
 
 import os
