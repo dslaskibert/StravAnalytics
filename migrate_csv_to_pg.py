@@ -1,6 +1,9 @@
 import os
 import pandas as pd
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
+
+load_dotenv()  # <-- ligne manquante
 
 FILES = {
     "activities_raw":   "data/activities.csv",
