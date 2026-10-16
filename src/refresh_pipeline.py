@@ -22,6 +22,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+# S'assurer que les dossiers d'écriture existent (utile en prod Docker)
+(ROOT / "data").mkdir(exist_ok=True)
+(ROOT / "data" / "streams").mkdir(exist_ok=True)
+
 STEPS = [
     ("fetch",    [sys.executable, "-u", "src/fetch.py"],            "Récupération API Strava"),
     ("clean",    [sys.executable, "-u", "src/clean.py"],            "Filtrage Run + enrichissement météo"),

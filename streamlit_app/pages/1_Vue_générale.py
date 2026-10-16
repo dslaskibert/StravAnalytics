@@ -14,29 +14,32 @@ df_enriched = load_data("data/activities_enriched.csv")
 st.title("StravAnalytics 🏃")
 st.header("Analyse de mes activités Strava")
 
-col_r1, col_r2, col_r3 = st.columns([1, 1, 4])
+col_r1, col_r2 = st.columns([1, 1])
 
 with col_r1:
-    if st.button("🔄 Recharger", help="Vide le cache serveur, relit la base Postgres (rapide)"):
+    if st.button("🔄 Recharger les données", use_container_width=True,
+                 help="Vide le cache serveur, relit la base Postgres (rapide)"):
         st.cache_data.clear()
         st.rerun()
 
 with col_r2:
-    if st.button("🔁 Depuis Strava",
+    if st.button("🔁 Actualiser depuis Strava", use_container_width=True,
                  help="Lance la pipeline complète : fetch Strava + enrichissement (~1 min)"):
-        with st.spinner("Pipeline en cours — fetch, clean, migrate, streams, km, enrich..."):
+        with st.spinner("Pipeline en cours — fetch, clean, migrate, streams, km, enrich (~1 min)..."):
             root = Path(__file__).resolve().parents[2]
             script = root / "src" / "refresh_pipeline.py"
             result = subprocess.run(
                 [sys.executable, str(script)],
-                capture_output=True, text=True, cwd=str(root), timeout=300,
+                capture_output=True, text=True, cwd=str(root), timeout=600,
             )
             if result.returncode == 0:
                 st.cache_data.clear()
                 st.success("✓ Pipeline terminée, données à jour.")
                 st.rerun()
             else:
-                st.error(f"✗ Erreur pipeline :\n{result.stdout[-2000:]}\n{result.stderr[-1000:]}")
+                st.error("✗ Erreur pipeline")
+                with st.expander("Détails de l'erreur"):
+                    st.code((result.stdout + "\n---\n" + result.stderr)[-3000:])
 
 # ──────────────────────────────────────────────────────────────────────────────
 # État actuel (cockpit) — recalculé à partir d'AUJOURD'HUI
