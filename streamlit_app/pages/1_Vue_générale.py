@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import subprocess
+import sys
+from pathlib import Path
 
 from utils import format_pace, load_data, STRAVA_ORANGE, STRAVA_BLUE, PLOT_BG, PAPER_BG
 
@@ -10,6 +13,30 @@ df_enriched = load_data("data/activities_enriched.csv")
 
 st.title("StravAnalytics 🏃")
 st.header("Analyse de mes activités Strava")
+
+col_r1, col_r2, col_r3 = st.columns([1, 1, 4])
+
+with col_r1:
+    if st.button("🔄 Recharger", help="Vide le cache serveur, relit la base Postgres (rapide)"):
+        st.cache_data.clear()
+        st.rerun()
+
+with col_r2:
+    if st.button("🔁 Depuis Strava",
+                 help="Lance la pipeline complète : fetch Strava + enrichissement (~1 min)"):
+        with st.spinner("Pipeline en cours — fetch, clean, migrate, streams, km, enrich..."):
+            root = Path(__file__).resolve().parents[2]
+            script = root / "src" / "refresh_pipeline.py"
+            result = subprocess.run(
+                [sys.executable, str(script)],
+                capture_output=True, text=True, cwd=str(root), timeout=300,
+            )
+            if result.returncode == 0:
+                st.cache_data.clear()
+                st.success("✓ Pipeline terminée, données à jour.")
+                st.rerun()
+            else:
+                st.error(f"✗ Erreur pipeline :\n{result.stdout[-2000:]}\n{result.stderr[-1000:]}")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # État actuel (cockpit) — recalculé à partir d'AUJOURD'HUI
