@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STEPS = [
     ("fetch",    [sys.executable, "-u", "src/fetch.py"],            "Récupération API Strava"),
     ("clean",    [sys.executable, "-u", "src/clean.py"],            "Filtrage Run + enrichissement météo"),
-    ("migrate",  [sys.executable, "-u", "migrate_csv_to_pg.py"],    "CSV → Postgres (raw/clean/map)"),
+    ("migrate",  [sys.executable, "-u", "src/migrate_csv_to_pg.py"],    "CSV → Postgres (raw/clean/map)"),
     ("streams",  [sys.executable, "-u", "src/fetch_streams.py"],    "Streams par activité"),
     ("km_table", [sys.executable, "-u", "src/build_km_table.py"],   "Agrégation par km"),
     ("enrich",   [sys.executable, "-u", "src/enrich_features.py"],  "Features de forme"),
