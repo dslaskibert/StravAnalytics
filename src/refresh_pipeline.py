@@ -27,12 +27,13 @@ ROOT = Path(__file__).resolve().parent.parent
 (ROOT / "data" / "streams").mkdir(exist_ok=True)
 
 STEPS = [
-    ("fetch",    [sys.executable, "-u", "src/fetch.py"],            "Récupération API Strava"),
-    ("clean",    [sys.executable, "-u", "src/clean.py"],            "Filtrage Run + enrichissement météo"),
-    ("migrate",  [sys.executable, "-u", "src/migrate_csv_to_pg.py"],    "CSV → Postgres (raw/clean/map)"),
-    ("streams",  [sys.executable, "-u", "src/fetch_streams.py"],    "Streams par activité"),
-    ("km_table", [sys.executable, "-u", "src/build_km_table.py"],   "Agrégation par km"),
-    ("enrich",   [sys.executable, "-u", "src/enrich_features.py"],  "Features de forme"),
+    ("fetch",        [sys.executable, "-u", "src/fetch.py"],              "Récupération API Strava"),
+    ("descriptions", [sys.executable, "-u", "src/fetch_descriptions.py"], "Descriptions détaillées (incrémental)"),
+    ("clean",        [sys.executable, "-u", "src/clean.py"],              "Filtrage Run + enrichissement météo"),
+    ("migrate",      [sys.executable, "-u", "src/migrate_csv_to_pg.py"],  "CSV → Postgres (raw/clean/map)"),
+    ("streams",      [sys.executable, "-u", "src/fetch_streams.py"],      "Streams par activité"),
+    ("km_table",     [sys.executable, "-u", "src/build_km_table.py"],     "Agrégation par km"),
+    ("enrich",       [sys.executable, "-u", "src/enrich_features.py"],    "Features de forme"),
 ]
 
 
@@ -67,7 +68,7 @@ def main():
                 break
     else:
         for name, cmd, label in STEPS:
-            if args.skip_fetch and name in ("fetch", "migrate"):
+            if args.skip_fetch and name in ("fetch", "descriptions"):
                 print(f"\n⇢ SKIP {name}")
                 continue
             run_step(name, cmd, label)

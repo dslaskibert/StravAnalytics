@@ -66,6 +66,17 @@ def main():
     df = df[df["sport_type"] == "Run"].copy()
     print(f"Runs only : {len(df)} activités")
 
+        # 1.5 Merge des descriptions (fetchées à part par fetch_descriptions.py)
+    desc_path = ROOT / "data" / "activities_descriptions.csv"
+    try:
+        df_desc = pd.read_csv(desc_path)[["id", "description"]]
+        df = df.merge(df_desc, on="id", how="left")
+        n_with_desc = df["description"].notna().sum()
+        print(f"Descriptions mergées : {n_with_desc}/{len(df)}")
+    except FileNotFoundError:
+        df["description"] = None
+        print("Pas de fichier descriptions, colonne vide.")
+
     # 2. Dates
     df["start_date_local"] = pd.to_datetime(df["start_date_local"], utc=True)
 
