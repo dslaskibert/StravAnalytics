@@ -22,7 +22,7 @@ CACHE_DIR = Path("data/streams")
 
 # Paramètres D+ lissé
 ELEV_SMOOTH_WINDOW = 20      # nb de points de la fenêtre de lissage
-ELEV_THRESHOLD_M   = 0.01    # ignorer les variations d'altitude < 0.3 m entre 2 points lissés
+ELEV_THRESHOLD_M   = 0.01    # filtre le bruit résiduel post-lissage (seuil absolu, adapté à l'enregistrement 1 Hz à ~3 m/s)
 # Paramètre : vitesse en dessous de laquelle on considère qu'on ne bouge pas
 MOVING_SPEED_THRESHOLD_MS = 0.3  # m/s ≈ 1.8 km/h (marche très lente)
 
